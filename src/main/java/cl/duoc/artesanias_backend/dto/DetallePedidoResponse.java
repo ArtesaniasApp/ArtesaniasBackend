@@ -5,6 +5,7 @@ import cl.duoc.artesanias_backend.model.DetallePedido;
 public record DetallePedidoResponse(
         Long productoId,
         String productoNombre,
+        String clasificacion,
         String imagenUrl,
         Integer cantidad,
         Integer precioUnitario,
@@ -14,6 +15,7 @@ public record DetallePedidoResponse(
         return new DetallePedidoResponse(
                 detalle.getProducto().getId(),
                 detalle.getProducto().getNombre(),
+                detalle.getProducto().getClasificacion().getNombre(),
                 detalle.getProducto().getImagenUrl(),
                 detalle.getCantidad(),
                 detalle.getPrecioUnitario(),

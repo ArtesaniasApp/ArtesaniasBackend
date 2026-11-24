@@ -132,6 +132,18 @@ class ProductoServiceTest {
     }
 
     @Test
+    void crearProductoSinImagen_guardaImagenVacia() {
+        ProductoRequest datos = new ProductoRequest(1L, "Jarro", "Jarro de greda", "Greda", null, null, 9990, 5, null);
+
+        when(clasificacionRepository.findById(1L)).thenReturn(Optional.of(new Clasificacion(1L, "Cerámica")));
+        when(estadoProductoRepository.findByNombre(Constantes.PRODUCTO_DISPONIBLE))
+                .thenReturn(Optional.of(new EstadoProducto(1L, Constantes.PRODUCTO_DISPONIBLE)));
+        when(productoRepository.save(any(Producto.class))).thenAnswer(invocacion -> invocacion.getArgument(0));
+
+        assertEquals("", productoService.crear(datos).imagenUrl());
+    }
+
+    @Test
     void crearProductoConClasificacionInexistente_lanzaNoEncontrado() {
         ProductoRequest datos = new ProductoRequest(99L, "Jarro", "Jarro de greda", "Greda", null, null, 9990, 5, "https://img");
 

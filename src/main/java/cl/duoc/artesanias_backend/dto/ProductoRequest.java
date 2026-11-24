@@ -33,7 +33,7 @@ public record ProductoRequest(
         @PositiveOrZero(message = "El stock no puede ser negativo")
         Integer stockDisponible,
 
-        @NotBlank(message = "La URL de la imagen es obligatoria")
+        // Opcional: la app no pide imagen al crear un producto
         String imagenUrl
 ) {
 }
