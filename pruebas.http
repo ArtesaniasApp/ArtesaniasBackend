@@ -1,0 +1,126 @@
+### Pruebas de la API (se pueden ejecutar desde IntelliJ / VS Code REST Client, o copiar a Postman)
+### 1) Ejecutar "login admin", copiar el token y pegarlo en @tokenAdmin. Lo mismo con el cliente.
+
+@base = http://localhost:8080
+@tokenAdmin = PEGAR_TOKEN_ADMIN
+@tokenCliente = PEGAR_TOKEN_CLIENTE
+
+### Login admin
+POST {{base}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin@aleyleo.cl", "password": "admin123" }
+
+### Login cliente
+POST {{base}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "cliente@aleyleo.cl", "password": "cliente123" }
+
+### Registro de un cliente nuevo
+POST {{base}}/api/auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Manuel Pérez",
+  "email": "manuel@correo.cl",
+  "telefono": "+56933333333",
+  "password": "secreto123",
+  "direccion": "Pasaje Las Flores 789, Maipú"
+}
+
+### Catálogo (público)
+GET {{base}}/api/productos
+
+### Catálogo por categoría
+GET {{base}}/api/productos?clasificacionId=1
+
+### Catálogo filtrado por material
+GET {{base}}/api/productos?material=Lana
+
+### Materiales disponibles (para el filtro)
+GET {{base}}/api/productos/materiales
+
+### Detalle de producto (lo que abre el QR)
+GET {{base}}/api/productos/1
+
+### Listas de apoyo (públicas)
+GET {{base}}/api/clasificaciones
+
+###
+GET {{base}}/api/metodos-pago
+
+###
+GET {{base}}/api/estados-pedido
+
+### Perfil del cliente
+GET {{base}}/api/usuarios/perfil
+Authorization: Bearer {{tokenCliente}}
+
+### Agregar a favoritos
+POST {{base}}/api/favoritos/1
+Authorization: Bearer {{tokenCliente}}
+
+### Ver favoritos
+GET {{base}}/api/favoritos
+Authorization: Bearer {{tokenCliente}}
+
+### Checkout: crear pedido
+POST {{base}}/api/pedidos
+Authorization: Bearer {{tokenCliente}}
+Content-Type: application/json
+
+{
+  "metodoPagoId": 1,
+  "items": [
+    { "productoId": 1, "cantidad": 2 },
+    { "productoId": 3, "cantidad": 1 }
+  ]
+}
+
+### Mis pedidos
+GET {{base}}/api/pedidos/mis-pedidos
+Authorization: Bearer {{tokenCliente}}
+
+### ADMIN: inventario completo
+GET {{base}}/api/admin/productos
+Authorization: Bearer {{tokenAdmin}}
+
+### ADMIN: crear producto
+POST {{base}}/api/admin/productos
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{
+  "clasificacionId": 1,
+  "nombre": "Jarro de greda",
+  "descripcion": "Jarro para agua hecho a mano",
+  "material": "Greda",
+  "descripcionMaterial": "Greda de Pomaire",
+  "descripcionTecnica": "1 litro",
+  "precioBase": 14990,
+  "stockDisponible": 7,
+  "imagenUrl": "https://picsum.photos/seed/jarro/600/600"
+}
+
+### ADMIN: actualizar stock
+PATCH {{base}}/api/admin/productos/1/stock
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "stock": 0 }
+
+### ADMIN: ver todos los pedidos
+GET {{base}}/api/admin/pedidos
+Authorization: Bearer {{tokenAdmin}}
+
+### ADMIN: cambiar estado de un pedido (2 = RECIBIDA)
+PATCH {{base}}/api/admin/pedidos/1/estado
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "estadoId": 2 }
+
+### Debe responder 403: un cliente intentando entrar al panel admin
+GET {{base}}/api/admin/productos
+Authorization: Bearer {{tokenCliente}}
