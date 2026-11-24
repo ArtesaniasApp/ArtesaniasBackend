@@ -91,6 +91,7 @@ class PedidoServiceTest {
         assertEquals("Calle Falsa 123", respuesta.direccionDespacho()); // dirección del perfil
         assertEquals(Constantes.PEDIDO_PENDIENTE, respuesta.estado());
         assertEquals(1, respuesta.detalles().size());
+        assertEquals("Cerámica", respuesta.detalles().get(0).clasificacion());
     }
 
     @Test

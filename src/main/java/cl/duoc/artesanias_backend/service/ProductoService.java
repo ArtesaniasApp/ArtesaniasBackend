@@ -162,6 +162,7 @@ public class ProductoService {
         producto.setDescripcionTecnica(datos.descripcionTecnica());
         producto.setPrecioBase(datos.precioBase());
         producto.setStockDisponible(datos.stockDisponible());
-        producto.setImagenUrl(datos.imagenUrl());
+        // La columna no acepta null: si la app no envía imagen se guarda vacía
+        producto.setImagenUrl(datos.imagenUrl() == null ? "" : datos.imagenUrl());
     }
 }
